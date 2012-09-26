@@ -194,7 +194,7 @@ D7......D0    D7......D0    D7......D0
                 Counter
   MSB...........................LSB
 */
-static void alim6117_wdt_do_set_timeout(unsigned int t)
+static void alim6117_wdt_set_counter(unsigned int t)
 {
 	unsigned int tmrval;
 	
@@ -213,7 +213,7 @@ Bit 7   0: Read only, Watchdog timer time out event does not happen.
         1: Read only, Watchdog timer time out event happens.
 Bit 6   Write 1 to reset Watchdog timer.
 */
-static void alim6117_wdt_do_ping(void)
+static void alim6117_wdt_reset(void)
 {
 	u8 val = alim6117_read(ALI_WDT_CTRL);
 
@@ -224,7 +224,7 @@ static void alim6117_wdt_do_ping(void)
 static int alim6117_wdt_set_timeout(struct watchdog_device *wd_dev, unsigned int t)
 {
 	alim6117_cfg_unlock();
-	alim6117_wdt_do_set_timeout(t);
+	alim6117_wdt_set_counter(t);
 	alim6117_cfg_lock();
 
 	return 0;
@@ -234,7 +234,7 @@ static int alim6117_wdt_start(struct watchdog_device *wd_dev)
 {
 	alim6117_cfg_unlock();
 	alim6117_wdt_disable();
-	alim6117_wdt_set_timeout(wd_dev, timeout);
+	alim6117_wdt_set_counter(timeout);
 	alim6117_wdt_signal_select(WDT_SIGNAL);
 	alim6117_wdt_enable();
 	alim6117_cfg_lock();
@@ -254,7 +254,7 @@ static int alim6117_wdt_stop(struct watchdog_device *wd_dev)
 static int alim6117_wdt_ping(struct watchdog_device *wd_dev)
 {
 	alim6117_cfg_unlock();
-	alim6117_wdt_do_ping();
+	alim6117_wdt_reset();
 	alim6117_cfg_lock();
 
 	return 0;
