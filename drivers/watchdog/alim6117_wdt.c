@@ -22,6 +22,9 @@
 
 /*
  * TODO:
+ * - complete log/debug messages consistency check
+ * - add support for WDIOC_GETTIMELEFT
+ * - check style (Documentation/CodingStyle)
  */
 
 #include <linux/module.h>
