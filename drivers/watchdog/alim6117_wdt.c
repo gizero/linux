@@ -25,8 +25,6 @@
  */
 
 #include <linux/module.h>
-#include <linux/io.h>
-
 #include <linux/watchdog.h>
 
 #define DRIVER_NAME		"alim6117-wdt"
