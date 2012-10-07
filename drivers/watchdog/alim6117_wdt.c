@@ -22,8 +22,6 @@
 
 /*
  * TODO:
- * - nowayout parameter is useless: config option always win at moment
- * - 
  */
 
 #include <linux/module.h>
@@ -79,8 +77,8 @@
 #define WATCHDOG_DEFAULT_TIMEOUT 60	/* 60 sec default timeout */
 
 /* module parameters */
-static int nowayout = WATCHDOG_NOWAYOUT;
-module_param(nowayout, int, 0);
+static bool nowayout = WATCHDOG_NOWAYOUT;
+module_param(nowayout, bool, 0);
 MODULE_PARM_DESC(nowayout,
 		"Watchdog cannot be stopped once started (default="
 				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
@@ -292,6 +290,8 @@ static int __init alim6117_wdt_init(void)
 	    	pr_info("%s: Watchdog timeout out of range. Using default value.\n", DRIVER_NAME);
 	    	timeout = WATCHDOG_DEFAULT_TIMEOUT;
 	    }
+
+	watchdog_set_nowayout(&alim6117_wdt_watchdog_dev, nowayout);
 	
 	ret = watchdog_register_device(&alim6117_wdt_watchdog_dev);
 	
