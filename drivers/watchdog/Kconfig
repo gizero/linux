@@ -432,6 +432,7 @@ config ALIM7101_WDT
 config ALIM6117_WDT
 	tristate "ALi M6117 SoC Watchdog"
 	depends on X86
+	select WATCHDOG_CORE
 	help
 	  This is the driver for the hardware watchdog on the ALi M6117 SoC.
 
