@@ -285,13 +285,24 @@ static struct watchdog_device alim6117_wdt_watchdog_dev = {
 
 static int __init alim6117_wdt_init(void)
 {
+    int ret;
+
 	if (timeout < WATCHDOG_MINTIMEOUT ||
 	    timeout > WATCHDOG_MAXTIMEOUT) {
-	    	pr_info("%s: Watchdog timeout out of range. Using default value.\n", __func__);
+	    	pr_info("%s: Watchdog timeout out of range. Using default value.\n", DRIVER_NAME);
 	    	timeout = WATCHDOG_DEFAULT_TIMEOUT;
 	    }
 	
-	return watchdog_register_device(&alim6117_wdt_watchdog_dev);
+	ret = watchdog_register_device(&alim6117_wdt_watchdog_dev);
+	
+	if (ret < 0) {
+	    pr_err("%s: cannot register watchdog (%d).\n", DRIVER_NAME, ret);
+	    return ret;
+	}
+	
+	pr_info("%s: watchdog registered. timeout=%d sec.\n", DRIVER_NAME, timeout);
+	
+	return 0;
 }
 
 static void __exit alim6117_wdt_exit(void)
